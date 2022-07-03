@@ -1,0 +1,17 @@
+version: '3.9' # Use this version of the compose syntax.
+
+services:
+  app:
+    build: 
+      context: .
+    # Link the local port 8000 to container port 8000.
+    ports:
+      - "8000:8000"
+    # Map the app directory into the app container directory.
+    # Syncs project code to container code.
+    volumes:
+      - ./app:/app
+    # Start the django server inside the container.
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+
