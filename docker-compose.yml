@@ -4,6 +4,9 @@ services:
   app:
     build: 
       context: .
+      # Overwrite the dev arg to true for this compose file.
+      args:
+        - DEV=true
     # Link the local port 8000 to container port 8000.
     ports:
       - "8000:8000"

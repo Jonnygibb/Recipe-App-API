@@ -6,6 +6,7 @@ ENV PYTHONUNBUFFERED 1
 
 # Copy requirements and app source from local machine to container.
 COPY ./requirements.txt /tmp/requirements.txt
+COPY /requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./app /app
 
 # Set working directory to app. Commands will run from here.
@@ -13,12 +14,17 @@ WORKDIR /app
 # Allow access to this port in the container from local machine.
 EXPOSE 8000
 
+# Default dev build to false.
+ARG DEV=false
 # Create virtual python env and install dependencies there.
 # Add a new user 'django-user' to avoid running on root user.
 # Combine commands into one run command to prevent excess image layers.
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
+    if [ $DEV = "true" ]; \
+        then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
+    fi && \
     rm -rf /tmp && \
     adduser \
         --disabled-password \
