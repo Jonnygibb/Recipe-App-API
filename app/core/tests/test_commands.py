@@ -10,11 +10,12 @@ from django.db.utils import OperationalError
 from django.test import SimpleTestCase
 
 # --------------------------------------------------------------
-# IMPORTANT - patch works from the inside out, i.e. Nested 
+# IMPORTANT - patch works from the inside out, i.e. Nested
 # patch decorators will the the first parameters.
 # --------------------------------------------------------------
 
-#Simulate the response from the custom django command using mock.
+
+# Simulate the response from the custom django command using mock.
 @patch('core.management.commands.wait_for_db.Command.check')
 class CommandTests(SimpleTestCase):
     """Test Commands"""
@@ -28,7 +29,7 @@ class CommandTests(SimpleTestCase):
         call_command('wait_for_db')
 
         # Assert that the command was called just once.
-        patched_check.assert_called_once_with(database=['default'])
+        patched_check.assert_called_once_with(databases=['default'])
 
     # Replace the sleep method with a majic mock object.
     # Means test won't sleep but rather pass straight away.
@@ -41,7 +42,8 @@ class CommandTests(SimpleTestCase):
 
         call_command('wait_for_db')
 
-        # Ensure the command was called 6 times to account for 5 errors then true.
+        # Ensure the command was called 6 times to account for
+        # 5 mock errors then true.
         self.assertEqual(patched_check.call_count, 6)
 
-        patched_check.assert_called_with(database=['default'])
+        patched_check.assert_called_with(databases=['default'])
