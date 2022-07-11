@@ -20,3 +20,20 @@ class ModelTests(TestCase):
         # Check user is made with email and password specified.
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
+
+    def test_new_user_email_normalised(self):
+        """Test email is normalised for new users."""
+        # Anything before the @ symbol can retain capitalisation
+        # however after the email, the domain must be lowercase
+        # in the standard implemented here.
+        sample_emails = [
+            ['test1@EXAMPLE.com', 'test1@example.com'],
+            ['Test1@Example.com', 'Test1@example.com'],
+            ['TEST3@EXAMPLE.com', 'TEST3@example.com'],
+            ['test4@example.COM', 'test4@example.com'],
+        ]
+        # Iterate over sample and expected email, create each email
+        # a user object and check email is correctly normalised in object.
+        for email, expected in sample_emails:
+            user = get_user_model().objects.create_user(email, 'sample123')
+            self.assertEqual(user.email, expected)
