@@ -34,3 +34,11 @@ class AdminSiteTests(TestCase):
         # Assert that the users name and email are displayed on the page.
         self.assertContains(res, self.user.name)
         self.assertContains(res, self.user.email)
+
+    def test_edit_users_page(self):
+        """Test the edit user page works."""
+        url = reverse('admin:core_user_change', args=[self.user.id])
+        res = self.client.get(url)
+
+        # Make sure that the page loads correctly.
+        self.assertEqual(res.status_code, 200)
