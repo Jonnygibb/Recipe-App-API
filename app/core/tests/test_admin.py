@@ -1,7 +1,6 @@
 """
 Tests for the Django admin modifications.
 """
-import email
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -35,4 +34,3 @@ class AdminSiteTests(TestCase):
         # Assert that the users name and email are displayed on the page.
         self.assertContains(res, self.user.name)
         self.assertContains(res, self.user.email)
-        
