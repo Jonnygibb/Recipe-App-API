@@ -5,7 +5,8 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
-
+# Serializer converts json object into python/django objects that
+# can also validate input from the user api.
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
 
