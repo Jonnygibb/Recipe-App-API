@@ -28,6 +28,27 @@ class UserSerializer(serializers.ModelSerializer):
         # Ensures that the password is encrypted.
         return get_user_model().objects.create_user(**validated_data)
 
+    def update(self, instance, validated_data):
+        """
+        Update and return user. Overwrites the update method that is called
+        on models when they are updated.
+        """
+        # Retrieve and remove the password if it exists.
+        password = validated_data.pop('password', None)
+        # Call the update method on the modelSerializer base class.
+        # This way, existing update code is utilsed and only necessary
+        # code is overwritten.
+        user = super().update(instance, validated_data)
+
+        # If the user sepcified an update to their password..
+        if password:
+            # set and save the password.
+            user.set_password(password)
+            user.save()
+
+        # Djangorestframework expects the model to be returned.
+        return user
+
 
 class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user auth token."""
